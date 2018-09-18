@@ -8,10 +8,13 @@ RUN apt-get -q update >/dev/null \
   && git clone --branch stable/queens https://github.com/openstack/nova.git \
   && curl https://bootstrap.pypa.io/get-pip.py | python \
   && pip install nova/ \
-
   # Cleanup
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ 
+
+COPY etc_nova/ /etc/nova
+COPY etc_nova/rootwrap.d/ /etc/nova/rootwrap.d/
+COPY start_nova.sh /usr/bin/start_nova.sh
 
 ENTRYPOINT ["/usr/bin/true"]
